@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace MonsterTools
 {
-    public partial class Form1 : Form
+    public partial class MonsterCreator : Form
     {
         #region Variables
         List<Monster> PokeMonsters = new List<Monster>();///Collection of Monster Objects
@@ -20,16 +20,14 @@ namespace MonsterTools
         Monster newMonster = new Monster();              ///Monster Object
 
         #endregion
-        public Form1()
+        public MonsterCreator()
         {
             InitializeComponent();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-
-            string Json = JsonConvert.SerializeObject(PokeMonsters);        ///Create a Json Formatted String of Monster Objection Collection
-            System.IO.File.WriteAllText(@"C:\Poke.txt", Json);              ///Write File of Json formatted string to 
+            Save();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -39,22 +37,16 @@ namespace MonsterTools
             bindingSource1.DataSource = PokeMonsters;                       ///Update Binding Source with our save file
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        void Save()
         {
-            if (bindingSource1.Position > 0)
-                bindingSource1.MovePrevious();
+            string Json = JsonConvert.SerializeObject(PokeMonsters);        ///Create a Json Formatted String of Monster Objection Collection
+            System.IO.File.WriteAllText(@"C:\Poke.txt", Json);              ///Write File of Json formatted string to 
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        void saveToolStripButton_Click(object sender, System.EventArgs e)
         {
-            if (bindingSource1.Position < bindingSource1.Count)
-                bindingSource1.MoveNext();
+            Save();
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            PokeMonsters.Add(new Monster());
-            bindingSource1.MoveLast();
-        }
     }
 }
