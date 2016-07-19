@@ -32,8 +32,16 @@ namespace MonsterTools
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            PokeMonsterFile = System.IO.File.ReadAllText(@"C:\Poke.txt");   ///Load in string from save file
-            PokeMonsters = JsonConvert.DeserializeObject<List<Monster>>(PokeMonsterFile);///unformat into our collection
+            try
+            {
+                PokeMonsterFile = System.IO.File.ReadAllText(@"C:\Poke.txt");   ///Load in string from save file
+                PokeMonsters = JsonConvert.DeserializeObject<List<Monster>>(PokeMonsterFile);///unformat into our collection
+            }
+            catch
+            {
+                PokeMonsters.Add(new Monster("Default", 0, 0, 0, 0, 0, 0));
+            }
+
             bindingSource1.DataSource = PokeMonsters;                       ///Update Binding Source with our save file
         }
 
