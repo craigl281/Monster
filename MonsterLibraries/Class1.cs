@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace MonsterLibraries
 {
@@ -10,15 +13,37 @@ namespace MonsterLibraries
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public byte Health { get; set; }
+        public byte Health
+        {
+            get
+            {
+                return _Health;
+            }
+            set
+            {
+                if (value > 0 && value < 255)
+                    _Health = value;
+                else
+                    System.Windows.Forms.MessageBox.Show("Enter a number from 0 - 255");
+            }
+        }
         public byte Attack { get; set; }
         public byte Defense { get; set; }
         public byte Speed { get; set; }
         public byte SpecialAttack { get; set; }
         public byte SpecialDef { get; set; }
         UInt16 Experience;
+        private byte _Health { get; set; }
+        private byte[] _image;
 
-        public Monster(string Name, byte Health, byte Attack, byte Defense, byte Speed, byte SpecialAttack, byte SpecialDef, UInt16 Experience)
+        public byte[] Image
+        {
+            get { return _image; }
+            set { _image = value; }
+        }
+
+
+        public Monster(string Name, byte Health, byte Attack, byte Defense, byte Speed, byte SpecialAttack, byte SpecialDef, byte[] Image, UInt16 Experience)
         {
             this.Name = Name;
             this.Health = Health;
@@ -27,6 +52,7 @@ namespace MonsterLibraries
             this.Speed = Speed;
             this.SpecialAttack = SpecialAttack;
             this.SpecialDef = SpecialDef;
+            this.Image = Image;
             this.Experience = Experience;
         }
 
@@ -34,7 +60,7 @@ namespace MonsterLibraries
         {
 
         }
-        public Monster(string Name, byte Health, byte Attack, byte Defense, byte Speed, byte SpecialAttack, byte SpecialDef)
+        public Monster(string Name, byte Health, byte Attack, byte Defense, byte Speed, byte SpecialAttack, byte SpecialDef, byte[] Image)
         {
             this.Name = Name;
             this.Health = Health;
@@ -43,7 +69,10 @@ namespace MonsterLibraries
             this.Speed = Speed;
             this.SpecialAttack = SpecialAttack;
             this.SpecialDef = SpecialDef;
+            this.Image = Image;
         }
+
+
     }
 
     public class Abilities
@@ -111,5 +140,36 @@ namespace MonsterLibraries
         {
 
         }
+    }
+
+    public static class Extensions
+    {
+        public static byte[] imageToByteArray(this Image image)
+        {
+            using (var ms = new MemoryStream())
+            {
+                image.Save(ms, image.RawFormat);
+                return ms.ToArray();
+            }
+        }
+
+        public static Image ByteArrayToImage(this byte[] bytearray)
+        {
+            if (bytearray == null)
+                return null;
+            using (var ms = new MemoryStream(bytearray))
+            {
+                return Image.FromStream(ms);
+            }
+        }
+
+        public static T Deserialize<T>(byte[] data) where T : class
+        {
+            using (var stream = new MemoryStream(data))
+            using (var reader = new StreamReader(stream))
+                return JsonSerializer.Create().Deserialize(reader, typeof(T)) as T;
+        }
+
+
     }
 }
