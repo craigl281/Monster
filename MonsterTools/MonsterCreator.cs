@@ -43,6 +43,7 @@ namespace MonsterTools
             try
             {
                 PokeMonsterFile = System.IO.File.ReadAllText(@"C:\Poke.txt");   ///Load in string from save file
+                
                 PokeMonsters = JsonConvert.DeserializeObject<List<Monster>>(PokeMonsterFile);///unformat into our collection
             }
             catch
@@ -56,8 +57,7 @@ namespace MonsterTools
         void Save()
         {
             PokeMonsters.Sort((l, r) => 1 * l.Name.CompareTo(r.Name));      ///On save, will resort the list alphabetically 
-
-            string Json = JsonConvert.SerializeObject(PokeMonsters);        ///Create a Json Formatted String of Monster Objection Collection
+            string Json = JsonConvert.SerializeObject(PokeMonsters, Formatting.Indented);        ///Create a Json Formatted String of Monster Objection Collection
             System.IO.File.WriteAllText(@"C:\Poke.txt", Json);              ///Write File of Json formatted string to 
         }
 

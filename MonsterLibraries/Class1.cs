@@ -91,6 +91,7 @@ namespace MonsterLibraries
         ///Name of Ability 
         private byte _BaseSpeed;
         private byte _Acc;
+        
 
         public char Type
         {
@@ -134,11 +135,30 @@ namespace MonsterLibraries
             set { _Acc = value; }
         }
 
+        private byte _Crit;
 
+        public byte Crit
+        {
+            get { return _Crit; }
+            set { _Crit = value; }
+        }
+
+        
 
         public Abilities()
         {
 
+        }
+
+        public Abilities(string Nameofmove, char Type, string Modifier, byte Power, byte Cost, byte Speed, byte Accuracy)
+        {
+            this.Name = Nameofmove;
+            this.Type = Type;
+            this.Modifier = Modifier;
+            this.Power = Power;
+            this.Cost = Cost;
+            this.BaseSpeed = Speed;
+            this.Acc = Accuracy;
         }
     }
 
